@@ -1,0 +1,51 @@
+package com.arashivision.robolectricdemo;
+
+import android.os.PersistableBundle;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+
+public class LifecycleActivity extends AppCompatActivity {
+
+    private String test;
+    private boolean isVisible = false;
+
+    public String getTest() {
+        return test;
+    }
+
+    public boolean isVisible() {
+        return isVisible;
+    }
+
+    @Override
+    public void onPostCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+        super.onPostCreate(savedInstanceState, persistentState);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        test = "onCreate";
+        setContentView(R.layout.activity_lifecycle);
+        isVisible = true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        test = "onResume";
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState!=null){
+            test = savedInstanceState.getString("TEST", null);
+        }
+    }
+}
