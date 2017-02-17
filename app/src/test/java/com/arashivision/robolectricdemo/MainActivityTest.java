@@ -4,7 +4,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 
 import static org.junit.Assert.assertTrue;
 
@@ -14,7 +13,7 @@ import static org.junit.Assert.assertTrue;
  * Created by CJS on 2017/2/17 09:55.
  */
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = 22 /* 23,24,25 ng*/)
+//@Config(constants = BuildConfig.class, sdk = 22 /* 23,24,25 ng*/)
 public class MainActivityTest {
 
     @Test
