@@ -1,6 +1,7 @@
 package com.arashivision.robolectricdemo;
 
 import android.content.Context;
+import android.content.Intent;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -8,7 +9,9 @@ import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
+import org.robolectric.Shadows;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadows.ShadowActivity;
 
 import static android.os.Build.VERSION_CODES.KITKAT;
 import static org.junit.Assert.assertEquals;
@@ -39,15 +42,24 @@ public class MainActivityTest {
     }
 
     @Test
-    @Config(qualifiers="en")
-    public void shouldUseEnglishResources() {
+    @Config(qualifiers = "en")
+    public void shouldUseEnglishResources() throws Exception {
         assertEquals("qualified resources", mContext.getString(R.string.overridden));
     }
 
     @Test
     @Config(qualifiers = "zh")
-    public void shouldUseChineseResources(){
+    public void shouldUseChineseResources() throws Exception {
         assertEquals("不重写", mContext.getString(R.string.not_overridden));
         assertEquals("指定资源", mContext.getString(R.string.overridden));
+    }
+
+    @Test
+    public void testJump() throws Exception {
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.findViewById(R.id.btn_jump).performClick();
+        ShadowActivity shadowActivity = Shadows.shadowOf(mainActivity);
+        Intent intent = shadowActivity.getNextStartedActivity();
+        assertEquals(intent.getComponent().getClassName(), LifecycleActivity.class.getName());
     }
 }
