@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">RobolectricDemo</string>
+    <string name="not_overridden">不重写</string>
+    <string name="overridden">指定资源</string>
 </resources>
