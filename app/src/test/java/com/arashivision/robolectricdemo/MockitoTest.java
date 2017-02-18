@@ -2,6 +2,7 @@ package com.arashivision.robolectricdemo;
 
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
+import org.mockito.InOrder;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -153,6 +154,25 @@ public class MockitoTest {
         List list = mock(List.class);
         doThrow(new RuntimeException()).when(list).add(1);
         list.add(1);
+    }
+
+    /**
+     * 验证执行顺序
+     */
+    @Test
+    public void testVerifyInOrder() throws Exception {
+        List list = mock(List.class);
+        List list2 = mock(List.class);
+        list.add(1);
+        list2.add("hello");
+        list.add(2);
+        list2.add("world");
+        InOrder inOrder = inOrder(list, list2);
+        // 下面的代码不能颠倒顺序，验证执行顺序
+        inOrder.verify(list).add(1);
+        inOrder.verify(list2).add("hello");
+        inOrder.verify(list).add(2);
+        inOrder.verify(list2).add("world");
     }
 
 }
