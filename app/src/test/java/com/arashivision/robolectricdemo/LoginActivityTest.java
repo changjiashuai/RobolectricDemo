@@ -43,7 +43,7 @@ public class LoginActivityTest {
     public void testLoginSuccess() throws Exception {
 
         emailView.setText("foo@example.com");
-        passwordView.setText("foo");
+        passwordView.setText("123456");
         button.performClick();
 
         ShadowApplication application = shadowOf(RuntimeEnvironment.application);

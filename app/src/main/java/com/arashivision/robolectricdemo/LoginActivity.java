@@ -10,18 +10,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends Activity implements LoginContract.View {
     /**
      * A dummy authentication store containing known user names and passwords.
      */
     private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:foo", "bar@example.com:bar"
+            "foo@example.com:123456", "bar@example.com:bar"
     };
 
     private EditText mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+
+    private UserService mUserService;
+    private LoginPresenter mLoginPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,9 @@ public class LoginActivity extends Activity {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        mUserService = new UserService();
+        mLoginPresenter = new LoginPresenter(mUserService, this);
     }
 
     private void attemptLogin() {
@@ -52,23 +58,8 @@ public class LoginActivity extends Activity {
 
         if (validEmail && validPwd) {
             showProgress(true);
-            loginUser(mEmailView.getText().toString(), mPasswordView.getText().toString());
+            mLoginPresenter.login(mEmailView.getText().toString(), mPasswordView.getText().toString());
         }
-    }
-
-    private void loginUser(String email, String password) {
-        for (String credential : DUMMY_CREDENTIALS) {
-            String[] pieces = credential.split(":");
-            if (pieces[0].equals(email) && pieces[1].equals(password)) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-                return;
-            }
-        }
-        showProgress(false);
-        setErrorMessageAndRequestFocus(mPasswordView, getString(R.string.error_incorrect_login));
-        setErrorMessageAndRequestFocus(mEmailView, getString(R.string.error_incorrect_login));
     }
 
     private void resetErrors() {
@@ -99,5 +90,38 @@ public class LoginActivity extends Activity {
         textView.setError(Html.fromHtml("<font color='red'>" + errorMessage + "</font>"));
         textView.requestFocus();
     }
-}
 
+    @Override
+    public boolean isActive() {
+        return hasWindowFocus();
+    }
+
+    @Override
+    public void setPresenter(LoginContract.Presenter presenter) {
+        mLoginPresenter = (LoginPresenter) presenter;
+    }
+
+    @Override
+    public void showLoginSuccess(User user) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                showProgress(false);
+                Intent intent = new Intent(LoginActivity.this, LifecycleActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    public void showLoginError(LoginException e) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                showProgress(false);
+                setErrorMessageAndRequestFocus(mPasswordView, getString(R.string.error_incorrect_login));
+                setErrorMessageAndRequestFocus(mEmailView, getString(R.string.error_incorrect_login));
+            }
+        });
+    }
+}
