@@ -11,6 +11,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -237,7 +238,7 @@ public class MockitoTest {
     @Test
     public void testAnswerWithCallback() throws Exception {
         List list = mock(List.class);
-        //使用Answer来生成我们我们期望的返回  
+        //使用Answer来生成我们我们期望的返回
         when(list.get(anyInt())).thenAnswer(new Answer<Object>() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -247,5 +248,31 @@ public class MockitoTest {
         });
         assertEquals("hello world:0", list.get(0));
         assertEquals("hello world:999", list.get(999));
+    }
+
+    /**
+     * 监控真实对象
+     */
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testSpyOnRealObjects() throws Exception {
+        List list = new LinkedList();
+        List spy = spy(list);
+        //下面预设的spy.get(0)会报错，因为会调用真实对象的get(0)，所以会抛出越界异常
+//        when(spy.get(0)).thenReturn(3);
+
+        //使用doReturn-when可以避免when-thenReturn调用真实对象api
+        doReturn(999).when(spy).get(999);
+        when(spy.size()).thenReturn(100);
+//        doReturn(100).when(spy).size();
+        spy.add(1);
+        spy.add(2);
+        assertEquals(100, spy.size());
+        assertEquals(1, spy.get(0));
+        assertEquals(2, spy.get(1));
+        verify(spy).add(1);
+        verify(spy).add(2);
+        assertEquals(999, spy.get(999));
+        // throw IndexOutOfBoundsException
+        spy.get(2);
     }
 }
