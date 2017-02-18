@@ -209,4 +209,23 @@ public class MockitoTest {
         //检查是否有未被验证的互动行为，因为add(2)没有被验证，所以下面的代码会失败抛出异常
 //        verifyNoMoreInteractions(list2);
     }
+
+    /**
+     * 连续调用
+     */
+    @Test(expected = RuntimeException.class)
+    public void testConsecutiveCalls() throws Exception {
+        List list = mock(List.class);
+        //模拟连续调用返回期望值，预设如果分开，则只有最后一个有效
+        when(list.get(0)).thenReturn(0);
+        when(list.get(0)).thenReturn(1);
+        when(list.get(0)).thenReturn(2);
+        when(list.get(1)).thenReturn(0).thenReturn(1).thenThrow(new RuntimeException());
+        assertEquals(2, list.get(0));
+        assertEquals(2, list.get(0));
+        assertEquals(0, list.get(1));
+        assertEquals(1, list.get(1));
+        //第三次或更多调用都会抛出异常
+        list.get(1);
+    }
 }
