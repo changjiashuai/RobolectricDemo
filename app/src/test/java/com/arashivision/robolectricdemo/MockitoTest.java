@@ -315,7 +315,7 @@ public class MockitoTest {
      * 真实的部分mock
      */
     @Test
-    public void testRealPartialMock(){
+    public void testRealPartialMock() throws Exception{
         List list = spy(new ArrayList());
         assertEquals(0, list.size());
         A a = mock(A.class);
@@ -327,5 +327,19 @@ public class MockitoTest {
         public int doSomething(int i){
             return i;
         }
+    }
+
+    /**
+     * 重置mock
+     */
+    @Test
+    public void testResetMock() throws Exception{
+        List list = mock(List.class);
+        when(list.size()).thenReturn(10);
+        list.add(1);
+        assertEquals(10, list.size());
+        //重置mock，清除所有的互动和预设
+        reset(list);
+        assertEquals(0, list.size());
     }
 }
