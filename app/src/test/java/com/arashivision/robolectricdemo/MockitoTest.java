@@ -1,6 +1,7 @@
 package com.arashivision.robolectricdemo;
 
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatcher;
 import org.mockito.InOrder;
 import org.mockito.invocation.InvocationOnMock;
@@ -292,5 +293,20 @@ public class MockitoTest {
         assertEquals(999, mock.get(1));
         //下面的size()没有预设，通常情况下会返回0，但是使用了Answer改变了默认期望值
         assertEquals(999, mock.size());
+    }
+
+    /**
+     * 捕获参数来进一步断言
+     */
+    @Test
+    public void testCapturingArgs() throws Exception {
+        UserDao userDao = mock(UserDao.class);
+        UserService userService = new UserService(userDao);
+
+        ArgumentCaptor<User> argumentCaptor = ArgumentCaptor.forClass(User.class);
+        userService.update("test", "123456");
+        verify(userDao).update(argumentCaptor.capture());
+        assertEquals("test", argumentCaptor.getValue().getUsername());
+        assertEquals("123456", argumentCaptor.getValue().getPassword());
     }
 }
