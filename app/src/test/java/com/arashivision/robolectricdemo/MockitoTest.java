@@ -3,6 +3,8 @@ package com.arashivision.robolectricdemo;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockito.InOrder;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -227,5 +229,23 @@ public class MockitoTest {
         assertEquals(1, list.get(1));
         //第三次或更多调用都会抛出异常
         list.get(1);
+    }
+
+    /**
+     * 使用回调生成期望值
+     */
+    @Test
+    public void testAnswerWithCallback() throws Exception {
+        List list = mock(List.class);
+        //使用Answer来生成我们我们期望的返回  
+        when(list.get(anyInt())).thenAnswer(new Answer<Object>() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                Object[] args = invocation.getArguments();
+                return "hello world:" + args[0];
+            }
+        });
+        assertEquals("hello world:0", list.get(0));
+        assertEquals("hello world:999", list.get(999));
     }
 }
