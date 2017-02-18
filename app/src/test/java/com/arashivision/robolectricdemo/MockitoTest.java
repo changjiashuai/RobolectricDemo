@@ -10,6 +10,7 @@ import org.mockito.stubbing.Answer;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -308,5 +309,23 @@ public class MockitoTest {
         verify(userDao).update(argumentCaptor.capture());
         assertEquals("test", argumentCaptor.getValue().getUsername());
         assertEquals("123456", argumentCaptor.getValue().getPassword());
+    }
+
+    /**
+     * 真实的部分mock
+     */
+    @Test
+    public void testRealPartialMock(){
+        List list = spy(new ArrayList());
+        assertEquals(0, list.size());
+        A a = mock(A.class);
+        when(a.doSomething(anyInt())).thenCallRealMethod();
+        assertEquals(999, a.doSomething(999));
+    }
+
+    class A {
+        public int doSomething(int i){
+            return i;
+        }
     }
 }
