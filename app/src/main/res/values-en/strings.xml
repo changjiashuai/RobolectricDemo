@@ -2,4 +2,6 @@
 <resources>
     <string name="app_name">RobolectricDemo</string>
     <string name="overridden">qualified resources</string>
+    <string name="error_incorrect_login">Password/Email is incorrect</string>
+    <string name="error_field_required">This field is required</string>
 </resources>

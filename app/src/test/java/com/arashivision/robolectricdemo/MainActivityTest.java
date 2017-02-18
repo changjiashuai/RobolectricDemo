@@ -57,9 +57,9 @@ public class MainActivityTest {
     @Test
     public void testJump() throws Exception {
         MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
-        mainActivity.findViewById(R.id.btn_jump).performClick();
+        mainActivity.findViewById(R.id.btn_login).performClick();
         ShadowActivity shadowActivity = Shadows.shadowOf(mainActivity);
         Intent intent = shadowActivity.getNextStartedActivity();
-        assertEquals(intent.getComponent().getClassName(), LifecycleActivity.class.getName());
+        assertEquals(intent.getComponent().getClassName(), LoginActivity.class.getName());
     }
 }
