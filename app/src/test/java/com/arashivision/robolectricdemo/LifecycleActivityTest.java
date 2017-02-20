@@ -3,6 +3,8 @@ package com.arashivision.robolectricdemo;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.arashivision.robolectricdemo.ui.LifecycleActivity;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;

@@ -1,6 +1,6 @@
 package com.arashivision.robolectricdemo.login;
 
-import com.arashivision.robolectricdemo.User;
+import com.arashivision.robolectricdemo.model.User;
 
 /**
  * Email: changjiashuai@gmail.com

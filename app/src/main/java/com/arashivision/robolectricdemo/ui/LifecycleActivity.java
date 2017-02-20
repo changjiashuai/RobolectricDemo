@@ -1,10 +1,12 @@
-package com.arashivision.robolectricdemo;
+package com.arashivision.robolectricdemo.ui;
 
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
+
+import com.arashivision.robolectricdemo.R;
 
 public class LifecycleActivity extends AppCompatActivity {
 

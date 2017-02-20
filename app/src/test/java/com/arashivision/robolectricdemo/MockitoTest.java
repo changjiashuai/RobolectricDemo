@@ -1,5 +1,9 @@
 package com.arashivision.robolectricdemo;
 
+import com.arashivision.robolectricdemo.data.UserRepository;
+import com.arashivision.robolectricdemo.data.local.UserLocalDataSource;
+import com.arashivision.robolectricdemo.model.User;
+
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatcher;
@@ -301,12 +305,13 @@ public class MockitoTest {
      */
     @Test
     public void testCapturingArgs() throws Exception {
-        UserDao userDao = mock(UserDao.class);
-        UserService userService = new UserService(userDao);
+        UserLocalDataSource userLocalDataSource = mock(UserLocalDataSource.class);
+        UserRepository userRepository = new UserRepository(userLocalDataSource);
 
         ArgumentCaptor<User> argumentCaptor = ArgumentCaptor.forClass(User.class);
-        userService.update("test", "123456");
-        verify(userDao).update(argumentCaptor.capture());
+        User user = new User("test", "123456");
+        userRepository.update(user);
+        verify(userLocalDataSource).update(argumentCaptor.capture());
         assertEquals("test", argumentCaptor.getValue().getUsername());
         assertEquals("123456", argumentCaptor.getValue().getPassword());
     }

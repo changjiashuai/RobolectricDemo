@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.widget.EditText;
 
+import com.arashivision.robolectricdemo.data.UserRepository;
 import com.arashivision.robolectricdemo.login.LoginActivity;
 import com.arashivision.robolectricdemo.login.LoginCallback;
 import com.arashivision.robolectricdemo.login.LoginContract;
 import com.arashivision.robolectricdemo.login.LoginException;
 import com.arashivision.robolectricdemo.login.LoginPresenter;
+import com.arashivision.robolectricdemo.model.User;
+import com.arashivision.robolectricdemo.ui.LifecycleActivity;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -49,12 +52,12 @@ import static org.mockito.Mockito.when;
 public class LoginPresenterTest {
 
     @Mock
-    private UserService mUserService;
-    @Mock
     private LoginContract.View mLoginView;
     @Captor
     private ArgumentCaptor<LoginCallback> mLoginCallbackArgumentCaptor;
 
+    @Mock
+    private UserRepository mUserRepository;
     private LoginPresenter mLoginPresenter;
     private User successUser;
     private User errorUser;
@@ -63,7 +66,7 @@ public class LoginPresenterTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        mLoginPresenter = new LoginPresenter(mUserService, mLoginView);
+        mLoginPresenter = new LoginPresenter(mUserRepository, mLoginView);
         successUser = new User("foo@example.com", "123456");
         errorUser = new User("error@example.com", "error");
         loginException = new LoginException("用户名或密码不正确");
@@ -73,7 +76,7 @@ public class LoginPresenterTest {
     @Test
     public void testLoginSuccess() throws Exception {
         mLoginPresenter.login(successUser.getUsername(), successUser.getPassword());
-        verify(mUserService).login(eq("foo@example.com"), eq("123456"), mLoginCallbackArgumentCaptor.capture());
+        verify(mUserRepository).login(eq("foo@example.com"), eq("123456"), mLoginCallbackArgumentCaptor.capture());
 
         mLoginCallbackArgumentCaptor.getValue().onLoginSuccess(successUser);
         ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
@@ -290,7 +293,7 @@ public class LoginPresenterTest {
                 callback.onLoginError(loginException);
                 return loginException;
             }
-        }).when(mUserService).login(not(argThat(new ArgumentMatcher<String>() {
+        }).when(mUserRepository).login(not(argThat(new ArgumentMatcher<String>() {
             @Override
             public boolean matches(String argument) {
                 return !argument.equals("foo@example.com");
@@ -302,7 +305,7 @@ public class LoginPresenterTest {
             }
         })), any(LoginCallback.class));
         mLoginPresenter.login(errorUser.getUsername(), errorUser.getPassword());
-        verify(mUserService).login(eq(errorUser.getUsername()), eq(errorUser.getPassword()), mLoginCallbackArgumentCaptor.capture());
+        verify(mUserRepository).login(eq(errorUser.getUsername()), eq(errorUser.getPassword()), mLoginCallbackArgumentCaptor.capture());
         mLoginCallbackArgumentCaptor.getValue().onLoginError(loginException);
         verify(mLoginView).showLoginError(loginException);
     }

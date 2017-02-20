@@ -1,7 +1,7 @@
 package com.arashivision.robolectricdemo.login;
 
-import com.arashivision.robolectricdemo.User;
-import com.arashivision.robolectricdemo.UserService;
+import com.arashivision.robolectricdemo.model.User;
+import com.arashivision.robolectricdemo.data.UserRepository;
 
 /**
  * Email: changjiashuai@gmail.com
@@ -12,18 +12,18 @@ import com.arashivision.robolectricdemo.UserService;
 public class LoginPresenter implements LoginContract.Presenter {
 
     private static final String TAG = "LoginPresenter";
-    private final UserService mUserService;
+    private final UserRepository mUserRepository;
     private final LoginContract.View mLoginView;
 
-    public LoginPresenter(UserService userService, LoginContract.View loginView) {
-        mUserService = userService;
+    public LoginPresenter(UserRepository userRepository, LoginContract.View loginView) {
+        mUserRepository = userRepository;
         mLoginView = loginView;
         mLoginView.setPresenter(this);
     }
 
     @Override
     public void login(String username, String password) {
-        mUserService.login(username, password, new LoginCallback() {
+        mUserRepository.login(username, password, new LoginCallback() {
             @Override
             public void onLoginSuccess(User user) {
                 mLoginView.showLoginSuccess(user);

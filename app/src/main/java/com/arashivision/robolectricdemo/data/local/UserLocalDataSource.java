@@ -1,37 +1,32 @@
-package com.arashivision.robolectricdemo;
+package com.arashivision.robolectricdemo.data.local;
 
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import com.arashivision.robolectricdemo.model.User;
+import com.arashivision.robolectricdemo.data.UserDataSource;
 import com.arashivision.robolectricdemo.login.LoginCallback;
 import com.arashivision.robolectricdemo.login.LoginException;
 
 /**
  * Email: changjiashuai@gmail.com
  *
- * Created by CJS on 2017/2/18 15:19.
+ * Created by CJS on 2017/2/20 12:01.
  */
 
-public class UserService {
-    private static final String TAG = "UserService";
-    public static final int MSG_LOGIN_SUCCESS = 0;
-    public static final int MSG_LOGIN_ERROR = 1;
-    private UserDao mUserDao;
+public class UserLocalDataSource implements UserDataSource {
+
+    private static final String TAG = "UserLocalDataSource";
 
     private Handler mUiHandler = new Handler(Looper.getMainLooper());
 
-    public UserService() {
+    @Override
+    public void update(User user) {
+
     }
 
-    public UserService(UserDao userDao) {
-        mUserDao = userDao;
-    }
-
-    public void update(String username, String password) {
-        mUserDao.update(new User(username, password));
-    }
-
+    @Override
     public void login(final String username, final String password, final LoginCallback loginCallback) {
         new Thread(new Runnable() {
             @Override

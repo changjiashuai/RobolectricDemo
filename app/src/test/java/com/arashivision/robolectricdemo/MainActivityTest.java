@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.arashivision.robolectricdemo.login.LoginActivity;
+import com.arashivision.robolectricdemo.ui.MainActivity;
 
 import org.junit.Before;
 import org.junit.Test;

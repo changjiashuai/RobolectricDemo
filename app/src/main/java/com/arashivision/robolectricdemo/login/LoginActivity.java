@@ -11,10 +11,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.arashivision.robolectricdemo.LifecycleActivity;
+import com.arashivision.robolectricdemo.ui.LifecycleActivity;
 import com.arashivision.robolectricdemo.R;
-import com.arashivision.robolectricdemo.User;
-import com.arashivision.robolectricdemo.UserService;
+import com.arashivision.robolectricdemo.model.User;
+import com.arashivision.robolectricdemo.data.UserRepository;
+import com.arashivision.robolectricdemo.data.local.UserLocalDataSource;
 
 public class LoginActivity extends Activity implements LoginContract.View {
     /**
@@ -29,7 +30,7 @@ public class LoginActivity extends Activity implements LoginContract.View {
     private View mProgressView;
     private View mLoginFormView;
 
-    private UserService mUserService;
+    private UserRepository mUserRepository;
     private LoginPresenter mLoginPresenter;
 
     @Override
@@ -52,8 +53,9 @@ public class LoginActivity extends Activity implements LoginContract.View {
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
-        mUserService = new UserService();
-        mLoginPresenter = new LoginPresenter(mUserService, this);
+        UserLocalDataSource mUserLocalDataSource = new UserLocalDataSource();
+        mUserRepository = new UserRepository(mUserLocalDataSource);
+        mLoginPresenter = new LoginPresenter(mUserRepository, this);
     }
 
     private void attemptLogin() {

@@ -1,10 +1,11 @@
-package com.arashivision.robolectricdemo;
+package com.arashivision.robolectricdemo.ui;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.arashivision.robolectricdemo.R;
 import com.arashivision.robolectricdemo.login.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
