@@ -1,8 +1,11 @@
 package com.arashivision.robolectricdemo;
 
 import android.os.Handler;
-import android.os.Message;
+import android.os.Looper;
 import android.util.Log;
+
+import com.arashivision.robolectricdemo.login.LoginCallback;
+import com.arashivision.robolectricdemo.login.LoginException;
 
 /**
  * Email: changjiashuai@gmail.com
@@ -16,12 +19,7 @@ public class UserService {
     public static final int MSG_LOGIN_ERROR = 1;
     private UserDao mUserDao;
 
-    private Handler mHandler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-        }
-    };
+    private Handler mUiHandler = new Handler(Looper.getMainLooper());
 
     public UserService() {
     }
@@ -42,11 +40,21 @@ public class UserService {
                 try {
                     Thread.sleep(2000);
                     if (username.equals("foo@example.com") && password.equals("123456")) {
-                        User user = new User(username, password);
-                        loginCallback.onLoginSuccess(user);
-                    }else {
-                        LoginException exception = new LoginException("login error");
-                        loginCallback.onLoginError(exception);
+                        final User user = new User(username, password);
+                        mUiHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                loginCallback.onLoginSuccess(user);
+                            }
+                        });
+                    } else {
+                        final LoginException exception = new LoginException("login error");
+                        mUiHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                loginCallback.onLoginError(exception);
+                            }
+                        });
                     }
                 } catch (InterruptedException e) {
                     LoginException exception = new LoginException(e);

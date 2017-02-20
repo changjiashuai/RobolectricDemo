@@ -3,6 +3,8 @@ package com.arashivision.robolectricdemo;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
 
 public class LifecycleActivity extends AppCompatActivity {
 
@@ -28,6 +30,13 @@ public class LifecycleActivity extends AppCompatActivity {
         test = "onCreate";
         setContentView(R.layout.activity_lifecycle);
         isVisible = true;
+
+        findViewById(R.id.btn_show_toast).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(LifecycleActivity.this, "I'm a toast", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

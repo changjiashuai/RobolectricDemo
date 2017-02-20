@@ -7,11 +7,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.shadows.ShadowToast;
 import org.robolectric.util.ActivityController;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -72,5 +75,12 @@ public class LifecycleActivityTest {
                 .restoreInstanceState(savedInstanceState)
                 .get();
         assertEquals(testStr, lifecycleActivity.getTest());
+    }
+
+    @Test
+    public void testShowToast() throws Exception {
+        LifecycleActivity lifecycleActivity = Robolectric.setupActivity(LifecycleActivity.class);
+        lifecycleActivity.findViewById(R.id.btn_show_toast).performClick();
+        assertThat(ShadowToast.getTextOfLatestToast(), equalTo("I'm a toast"));
     }
 }

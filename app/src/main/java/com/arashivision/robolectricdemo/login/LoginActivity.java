@@ -1,4 +1,4 @@
-package com.arashivision.robolectricdemo;
+package com.arashivision.robolectricdemo.login;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,6 +9,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.arashivision.robolectricdemo.LifecycleActivity;
+import com.arashivision.robolectricdemo.R;
+import com.arashivision.robolectricdemo.User;
+import com.arashivision.robolectricdemo.UserService;
 
 public class LoginActivity extends Activity implements LoginContract.View {
     /**
@@ -87,6 +93,7 @@ public class LoginActivity extends Activity implements LoginContract.View {
     }
 
     private void setErrorMessageAndRequestFocus(TextView textView, String errorMessage) {
+        Toast.makeText(this, "e:" + errorMessage, Toast.LENGTH_SHORT).show();
         textView.setError(Html.fromHtml("<font color='red'>" + errorMessage + "</font>"));
         textView.requestFocus();
     }
@@ -103,25 +110,16 @@ public class LoginActivity extends Activity implements LoginContract.View {
 
     @Override
     public void showLoginSuccess(User user) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                showProgress(false);
-                Intent intent = new Intent(LoginActivity.this, LifecycleActivity.class);
-                startActivity(intent);
-            }
-        });
+        showProgress(false);
+        Intent intent = new Intent(LoginActivity.this, LifecycleActivity.class);
+        startActivity(intent);
     }
 
     @Override
     public void showLoginError(LoginException e) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                showProgress(false);
-                setErrorMessageAndRequestFocus(mPasswordView, getString(R.string.error_incorrect_login));
-                setErrorMessageAndRequestFocus(mEmailView, getString(R.string.error_incorrect_login));
-            }
-        });
+        Toast.makeText(this, "e:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        showProgress(false);
+        setErrorMessageAndRequestFocus(mPasswordView, getString(R.string.error_incorrect_login));
+        setErrorMessageAndRequestFocus(mEmailView, getString(R.string.error_incorrect_login));
     }
 }

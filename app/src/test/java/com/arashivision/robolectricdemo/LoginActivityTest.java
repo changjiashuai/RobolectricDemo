@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.arashivision.robolectricdemo.login.LoginActivity;
+
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;

@@ -3,6 +3,8 @@ package com.arashivision.robolectricdemo;
 import android.content.Context;
 import android.content.Intent;
 
+import com.arashivision.robolectricdemo.login.LoginActivity;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,6 +1,7 @@
-package com.arashivision.robolectricdemo;
+package com.arashivision.robolectricdemo.login;
 
-import android.util.Log;
+import com.arashivision.robolectricdemo.User;
+import com.arashivision.robolectricdemo.UserService;
 
 /**
  * Email: changjiashuai@gmail.com
@@ -25,13 +26,11 @@ public class LoginPresenter implements LoginContract.Presenter {
         mUserService.login(username, password, new LoginCallback() {
             @Override
             public void onLoginSuccess(User user) {
-//                Log.i(TAG, "onLoginSuccess: ");
                 mLoginView.showLoginSuccess(user);
             }
 
             @Override
             public void onLoginError(LoginException e) {
-//                Log.i(TAG, "onLoginError: ");
                 mLoginView.showLoginError(e);
             }
         });

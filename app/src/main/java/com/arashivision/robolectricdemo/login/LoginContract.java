@@ -1,4 +1,8 @@
-package com.arashivision.robolectricdemo;
+package com.arashivision.robolectricdemo.login;
+
+import com.arashivision.robolectricdemo.BasePresenter;
+import com.arashivision.robolectricdemo.BaseView;
+import com.arashivision.robolectricdemo.User;
 
 /**
  * Email: changjiashuai@gmail.com
