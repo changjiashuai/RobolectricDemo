@@ -31,9 +31,14 @@
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.arashivision.robolectricdemo.receiver"/>
+                <action android:name="com.arashivision.robolectricdemo.receiver" />
             </intent-filter>
         </receiver>
+
+        <service
+            android:name=".service.MyService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>
