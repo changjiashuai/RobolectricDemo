@@ -11,11 +11,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.arashivision.robolectricdemo.ui.LifecycleActivity;
 import com.arashivision.robolectricdemo.R;
-import com.arashivision.robolectricdemo.model.User;
 import com.arashivision.robolectricdemo.data.UserRepository;
 import com.arashivision.robolectricdemo.data.local.UserLocalDataSource;
+import com.arashivision.robolectricdemo.model.User;
+import com.arashivision.robolectricdemo.ui.LifecycleActivity;
 
 public class LoginActivity extends Activity implements LoginContract.View {
     /**

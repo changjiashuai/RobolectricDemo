@@ -85,50 +85,13 @@ public class LoginPresenterTest {
 
     @Test
     public void testLoginSuccessAndJump() throws Exception {
-
         LoginActivity loginActivity = Robolectric.setupActivity(LoginActivity.class);
         EditText mEmailView = (EditText) loginActivity.findViewById(R.id.email);
         EditText mPasswordView = (EditText) loginActivity.findViewById(R.id.password);
         mEmailView.setText("foo@example.com");
         mPasswordView.setText("123456");
         loginActivity.findViewById(R.id.email_sign_in_button).performClick();
-
-        // 指示任务何时结束
-        final CountDownLatch signal = new CountDownLatch(1);
-        // 异步的任务
-        AsyncTask<String, Void, String> myTask = new AsyncTask<String, Void, String>() {
-            @Override
-            protected String doInBackground(String... arg0) {
-                //Do something meaningful.
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                return "something happened!";
-            }
-
-            @Override
-            protected void onPostExecute(String result) {
-                super.onPostExecute(result);
-                System.out.println("-->" + result);
-                signal.countDown();
-            }
-        };
-        // 开始异步任务
-        myTask.execute("Do something");
-
-        // 暂停当前的线程,等待异步任务完成
-        try {
-            signal.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("--> end");
-
-
+        mockAsyncTask();
         ShadowActivity shadowActivity = Shadows.shadowOf(loginActivity);
         Intent intent = shadowActivity.getNextStartedActivity();
         assertNotNull("Activity not started.", intent);
@@ -144,108 +107,41 @@ public class LoginPresenterTest {
 
     @Test
     public void testLoginWithErrorUsernameAndErrorPassword() throws Exception {
-
         LoginActivity loginActivity = Robolectric.setupActivity(LoginActivity.class);
         EditText mEmailView = (EditText) loginActivity.findViewById(R.id.email);
         EditText mPasswordView = (EditText) loginActivity.findViewById(R.id.password);
         mEmailView.setText("fodfo@example.com");
         mPasswordView.setText("errorpwd");
         loginActivity.findViewById(R.id.email_sign_in_button).performClick();
-
-        // 指示任务何时结束
-        final CountDownLatch signal = new CountDownLatch(1);
-        // 异步的任务
-        AsyncTask<String, Void, String> myTask = new AsyncTask<String, Void, String>() {
-            @Override
-            protected String doInBackground(String... arg0) {
-                //Do something meaningful.
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                return "something happened!";
-            }
-
-            @Override
-            protected void onPostExecute(String result) {
-                super.onPostExecute(result);
-                System.out.println("-->" + result);
-                signal.countDown();
-            }
-        };
-        // 开始异步任务
-        myTask.execute("Do something");
-
-        // 暂停当前的线程,等待异步任务完成
-        try {
-            signal.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("--> end");
+        mockAsyncTask();
         assertThat(ShadowToast.getTextOfLatestToast(), equalTo("e:用户名或密码不正确"));
     }
 
     @Test
     public void testLoginWithUsernameAndErrorPassword() throws Exception {
-
         LoginActivity loginActivity = Robolectric.setupActivity(LoginActivity.class);
         EditText mEmailView = (EditText) loginActivity.findViewById(R.id.email);
         EditText mPasswordView = (EditText) loginActivity.findViewById(R.id.password);
         mEmailView.setText("foo@example.com");
         mPasswordView.setText("errorpwd");
         loginActivity.findViewById(R.id.email_sign_in_button).performClick();
-
-        // 指示任务何时结束
-        final CountDownLatch signal = new CountDownLatch(1);
-        // 异步的任务
-        AsyncTask<String, Void, String> myTask = new AsyncTask<String, Void, String>() {
-            @Override
-            protected String doInBackground(String... arg0) {
-                //Do something meaningful.
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                return "something happened!";
-            }
-
-            @Override
-            protected void onPostExecute(String result) {
-                super.onPostExecute(result);
-                System.out.println("-->" + result);
-                signal.countDown();
-            }
-        };
-        // 开始异步任务
-        myTask.execute("Do something");
-
-        // 暂停当前的线程,等待异步任务完成
-        try {
-            signal.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("--> end");
+        mockAsyncTask();
         assertThat(ShadowToast.getTextOfLatestToast(), equalTo("e:用户名或密码不正确"));
     }
 
     @Test
     public void testLoginWithErrorUsernameAndPassword() throws Exception {
-
         LoginActivity loginActivity = Robolectric.setupActivity(LoginActivity.class);
         EditText mEmailView = (EditText) loginActivity.findViewById(R.id.email);
         EditText mPasswordView = (EditText) loginActivity.findViewById(R.id.password);
         mEmailView.setText("fodfo@example.com");
         mPasswordView.setText("123456");
         loginActivity.findViewById(R.id.email_sign_in_button).performClick();
+        mockAsyncTask();
+        assertThat(ShadowToast.getTextOfLatestToast(), equalTo("e:用户名或密码不正确"));
+    }
 
+    private void mockAsyncTask() {
         // 指示任务何时结束
         final CountDownLatch signal = new CountDownLatch(1);
         // 异步的任务
@@ -275,12 +171,12 @@ public class LoginPresenterTest {
         // 暂停当前的线程,等待异步任务完成
         try {
             signal.await();
+//            signal.await(3, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         System.out.println("--> end");
-        assertThat(ShadowToast.getTextOfLatestToast(), equalTo("e:用户名或密码不正确"));
     }
 
     @Test

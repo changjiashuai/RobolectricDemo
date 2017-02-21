@@ -14,4 +14,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Login" />
+
+    <CheckBox
+        android:id="@+id/cb_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="test checkbox" />
+
+    <Button
+        android:id="@+id/btn_show_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="show dialog" />
 </LinearLayout>

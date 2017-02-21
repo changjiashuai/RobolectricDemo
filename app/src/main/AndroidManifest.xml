@@ -24,7 +24,16 @@
         <activity android:name=".ui.LifecycleActivity" />
         <activity
             android:name=".login.LoginActivity"
-            android:label="@string/title_activity_login"></activity>
+            android:label="@string/title_activity_login" />
+
+        <receiver
+            android:name=".receiver.MyReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.arashivision.robolectricdemo.receiver"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

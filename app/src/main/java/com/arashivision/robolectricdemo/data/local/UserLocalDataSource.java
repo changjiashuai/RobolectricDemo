@@ -4,10 +4,13 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import com.arashivision.robolectricdemo.model.User;
 import com.arashivision.robolectricdemo.data.UserDataSource;
 import com.arashivision.robolectricdemo.login.LoginCallback;
 import com.arashivision.robolectricdemo.login.LoginException;
+import com.arashivision.robolectricdemo.model.User;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Email: changjiashuai@gmail.com
@@ -20,6 +23,7 @@ public class UserLocalDataSource implements UserDataSource {
     private static final String TAG = "UserLocalDataSource";
 
     private Handler mUiHandler = new Handler(Looper.getMainLooper());
+    private ExecutorService mExecutorService = Executors.newSingleThreadExecutor();
 
     @Override
     public void update(User user) {
@@ -28,7 +32,7 @@ public class UserLocalDataSource implements UserDataSource {
 
     @Override
     public void login(final String username, final String password, final LoginCallback loginCallback) {
-        new Thread(new Runnable() {
+        mExecutorService.execute(new Runnable() {
             @Override
             public void run() {
                 Log.i(TAG, "run: 模拟登陆中...");
@@ -56,6 +60,6 @@ public class UserLocalDataSource implements UserDataSource {
                     loginCallback.onLoginError(exception);
                 }
             }
-        }).start();
+        });
     }
 }
