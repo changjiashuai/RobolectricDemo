@@ -22,6 +22,7 @@ import org.robolectric.shadows.ShadowAlertDialog;
 import static android.os.Build.VERSION_CODES.KITKAT;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.robolectric.Shadows.shadowOf;
@@ -91,6 +92,7 @@ public class MainActivityTest {
     @Test
     public void testShowAlertDialog() throws Exception {
         MainActivity activity = Robolectric.setupActivity(MainActivity.class);
+        // android.app.AlertDialog support 需要加依赖库
         AlertDialog dialog = ShadowAlertDialog.getLatestAlertDialog();
 
         //
@@ -98,14 +100,12 @@ public class MainActivityTest {
 
         Button btnShowDialog = (Button) activity.findViewById(R.id.btn_show_dialog);
         btnShowDialog.performClick();
-        Thread.sleep(1000);
         dialog = ShadowAlertDialog.getLatestAlertDialog();
         //
-        System.out.println("dialog=" + dialog);
-//        assertNotNull(dialog);
-//        //
-//        ShadowAlertDialog shadowAlertDialog = shadowOf(dialog);
-//        assertEquals("警告", shadowAlertDialog.getTitle());
-//        assertEquals("测试Alert Dialog", shadowAlertDialog.getMessage());
+        assertNotNull(dialog);
+        //
+        ShadowAlertDialog shadowAlertDialog = shadowOf(dialog);
+        assertEquals("警告", shadowAlertDialog.getTitle());
+        assertEquals("测试Alert Dialog", shadowAlertDialog.getMessage());
     }
 }

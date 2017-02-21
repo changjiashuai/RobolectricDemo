@@ -22,6 +22,7 @@ public class MyFragmentTest {
     public void setup() throws Exception {
         mMyFragment = new MyFragment();
         // 把Fragment添加到Activity中 ---> android.app.Fragment
+        // 如果使用support的Fragment testCompile "org.robolectric:shadows-support-v4:3.0"
         FragmentTestUtil.startFragment(mMyFragment);
     }
 
