@@ -1,7 +1,7 @@
 package com.arashivision.robolectricdemo.data;
 
 import com.arashivision.robolectricdemo.model.User;
-import com.arashivision.robolectricdemo.login.LoginCallback;
+import com.arashivision.robolectricdemo.ui.login.LoginCallback;
 
 /**
  * Email: changjiashuai@gmail.com

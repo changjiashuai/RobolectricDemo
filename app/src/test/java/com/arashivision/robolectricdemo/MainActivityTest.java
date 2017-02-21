@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.widget.Button;
 import android.widget.CheckBox;
 
-import com.arashivision.robolectricdemo.login.LoginActivity;
+import com.arashivision.robolectricdemo.ui.login.LoginActivity;
 import com.arashivision.robolectricdemo.ui.MainActivity;
 
 import org.junit.Before;

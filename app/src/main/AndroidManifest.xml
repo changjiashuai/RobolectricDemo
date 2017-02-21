@@ -23,7 +23,7 @@
         </activity>
         <activity android:name=".ui.LifecycleActivity" />
         <activity
-            android:name=".login.LoginActivity"
+            android:name=".ui.login.LoginActivity"
             android:label="@string/title_activity_login" />
 
         <receiver

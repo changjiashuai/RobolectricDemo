@@ -5,8 +5,8 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.arashivision.robolectricdemo.data.UserDataSource;
-import com.arashivision.robolectricdemo.login.LoginCallback;
-import com.arashivision.robolectricdemo.login.LoginException;
+import com.arashivision.robolectricdemo.ui.login.LoginCallback;
+import com.arashivision.robolectricdemo.ui.login.LoginException;
 import com.arashivision.robolectricdemo.model.User;
 
 import java.util.concurrent.ExecutorService;

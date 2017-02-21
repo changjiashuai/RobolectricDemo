@@ -1,4 +1,4 @@
-package com.arashivision.robolectricdemo.login;
+package com.arashivision.robolectricdemo.ui.login;
 
 import com.arashivision.robolectricdemo.BasePresenter;
 import com.arashivision.robolectricdemo.BaseView;

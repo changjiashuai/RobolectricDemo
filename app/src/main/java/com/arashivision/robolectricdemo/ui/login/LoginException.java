@@ -1,4 +1,4 @@
-package com.arashivision.robolectricdemo.login;
+package com.arashivision.robolectricdemo.ui.login;
 
 /**
  * Email: changjiashuai@gmail.com

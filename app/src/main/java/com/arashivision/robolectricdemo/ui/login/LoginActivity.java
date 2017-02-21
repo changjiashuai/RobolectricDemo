@@ -1,4 +1,4 @@
-package com.arashivision.robolectricdemo.login;
+package com.arashivision.robolectricdemo.ui.login;
 
 import android.app.Activity;
 import android.content.Intent;

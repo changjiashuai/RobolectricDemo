@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.arashivision.robolectricdemo.R;
-import com.arashivision.robolectricdemo.login.LoginActivity;
+import com.arashivision.robolectricdemo.ui.login.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
 
