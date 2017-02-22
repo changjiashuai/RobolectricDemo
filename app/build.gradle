@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'jacoco'
+
 
 android {
     compileSdkVersion 25
@@ -17,6 +19,31 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+}
+
+//jacocoTestReport依赖于testDebugUnitTest task，所以在执行jacoco之前需要先执行testDebugUnitTest
+task jacocoTestReport(type:JacocoReport,dependsOn:"testDebugUnitTest"){
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports after running tests."
+    reports{
+        xml.enabled = false
+        html.enabled = true
+        csv.enabled = false
+    }
+    classDirectories = fileTree(
+            dir : "$buildDir/intermediates/classes/test/debug",
+            excludes : [
+                    '**/R.class',
+                    '**/R$*.class',
+                    '**/BuildConfig.*',
+                    '**/Manifest*.*'
+            ]
+    )
+    def coverageSourceDirs = ['src/main/java']
+    additionalSourceDirs = files(coverageSourceDirs)
+    sourceDirectories = files(coverageSourceDirs)
+    additionalClassDirs = files(coverageSourceDirs)
+    executionData = files("$buildDir/jacoco/testDebugUnitTest.exec")
 }
 
 dependencies {

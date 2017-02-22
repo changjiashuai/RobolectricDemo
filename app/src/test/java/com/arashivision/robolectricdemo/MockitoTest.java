@@ -105,6 +105,7 @@ public class MockitoTest {
         assertEquals(1, list.get(1));
         assertEquals(1, list.get(999));
         assertTrue(list.contains(1));
+        assertTrue(list.contains(2));
         assertTrue(!list.contains(3));
     }
 
