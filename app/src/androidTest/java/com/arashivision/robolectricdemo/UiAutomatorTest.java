@@ -11,9 +11,13 @@ import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.Until;
 
+import com.squareup.spoon.Spoon;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.io.File;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -28,18 +32,21 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class UiAutomatorTest {
 
-
+    private static final String TAG = "UiAutomatorTest";
     private static final String BASIC_SAMPLE_PACKAGE
             = "com.arashivision.robolectricdemo";
 
     private static final int LAUNCH_TIMEOUT = 5000;
 
     private UiDevice mUiDevice;
+    private Context mContext;
 
     @Before
     public void testStartMainActivityFromHomeScreen() {
         mUiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         mUiDevice.pressHome();
+
+        mContext = InstrumentationRegistry.getContext();
 
         String launcherPackage = getLauncherPackageName();
         assertThat(launcherPackage, notNullValue());
@@ -59,14 +66,31 @@ public class UiAutomatorTest {
         assertThat(mUiDevice, notNullValue());
     }
 
+
+    private File createFile(){
+        String filename = System.currentTimeMillis() + ".png";
+        return new File(mContext.getExternalCacheDir(), filename);
+    }
+
+    private void screenshot(){
+        File file = createFile();
+        mUiDevice.takeScreenshot(file);
+        Spoon.save(mContext, file);
+    }
+
     @Test
     public void testShowAlertDialog() {
         mUiDevice.findObject(By.res(BASIC_SAMPLE_PACKAGE, "btn_show_dialog"))
                 .click();
 
+        screenshot();
+
         UiObject2 dialogMessage = mUiDevice.wait(Until
                 .findObject(By.text("测试Alert Dialog")), 500);
         assertThat(dialogMessage.getText(), is(equalTo("测试Alert Dialog")));
+
+        screenshot();
+
     }
 
     @Test

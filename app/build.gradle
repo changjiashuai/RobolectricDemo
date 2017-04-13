@@ -1,6 +1,11 @@
 apply plugin: 'com.android.application'
 apply plugin: 'jacoco'
 apply plugin: 'groovyx.android'
+apply plugin: 'spoon'
+
+spoon {
+    grantAllPermissions = true
+}
 
 android {
     compileSdkVersion 25
@@ -64,4 +69,5 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     });
     androidTestCompile 'org.hamcrest:hamcrest-integration:1.3'
+    androidTestCompile 'com.squareup.spoon:spoon-client:1.6.4'
 }
