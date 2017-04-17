@@ -56,14 +56,19 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    androidTestCompile ('com.android.support.test.espresso:espresso-intents:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
     compile 'com.android.support:appcompat-v7:25.1.1'
     compile 'com.android.support:design:25.1.1'
     compile 'com.android.support:support-v4:25.1.1'
     testCompile 'junit:junit:4.12'
     testCompile 'org.robolectric:robolectric:3.2.2'
+//    testCompile 'org.robolectric:robolectric:3.0'
     testCompile 'org.mockito:mockito-core:2.7.9'
     testCompile "org.spockframework:spock-core:1.1-groovy-2.4-rc-2"
     compile "org.codehaus.groovy:groovy:2.4.7:grooid"
+//    testCompile 'org.robospock:robospock:1.0.1'
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
     androidTestCompile ('com.android.support.test:runner:0.5', {
         exclude group: 'com.android.support', module: 'support-annotations'
