@@ -58,6 +58,7 @@ public class LoginActivity extends Activity implements LoginContract.View {
         mLoginPresenter = new LoginPresenter(mUserRepository, this);
     }
 
+    // TODO: 2017/4/19 for test 
     private void attemptLogin() {
         resetErrors();
 

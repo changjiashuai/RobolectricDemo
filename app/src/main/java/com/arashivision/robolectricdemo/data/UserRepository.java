@@ -25,6 +25,7 @@ public class UserRepository implements UserDataSource {
 
     @Override
     public void login(String username, String password, LoginCallback loginCallback) {
+        //fake data source
         mUserDataSource.login(username, password, loginCallback);
     }
 }

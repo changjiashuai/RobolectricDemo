@@ -32,6 +32,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.AdditionalMatchers.not;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
@@ -53,9 +54,9 @@ public class LoginPresenterTest {
     private LoginContract.View mLoginView;
     @Captor
     private ArgumentCaptor<LoginCallback> mLoginCallbackArgumentCaptor;
-
     @Mock
     private UserRepository mUserRepository;
+
     private LoginPresenter mLoginPresenter;
     private User successUser;
     private User errorUser;
@@ -68,26 +69,31 @@ public class LoginPresenterTest {
         successUser = new User("foo@example.com", "123456");
         errorUser = new User("error@example.com", "error");
         loginException = new LoginException("用户名或密码不正确");
+        // make sure ui is visible
         when(mLoginView.isActive()).thenReturn(true);
     }
 
+    // business logic flow
     @Test
     public void testLoginSuccess() throws Exception {
         mLoginPresenter.login(successUser.getUsername(), successUser.getPassword());
+        //verify callback is called.
         verify(mUserRepository).login(eq("foo@example.com"), eq("123456"), mLoginCallbackArgumentCaptor.capture());
 
         mLoginCallbackArgumentCaptor.getValue().onLoginSuccess(successUser);
         ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
+        //verify callback method onLoginSuccess is called.
         verify(mLoginView).showLoginSuccess(userArgumentCaptor.capture());
         assertEquals(successUser.getUsername(), userArgumentCaptor.getValue().getUsername());
         assertEquals(successUser.getPassword(), userArgumentCaptor.getValue().getPassword());
     }
 
+    // Robolectric test exec logic flow
     @Test
     public void testLoginSuccessAndJumpWithCallback() {
         final LoginActivity loginActivity = Robolectric.setupActivity(LoginActivity.class);
         //mock click login button
-        mUserRepository.login("foo@example.com", "123456", new LoginCallback() {
+        mUserRepository.login("fo@example.com", "123456", new LoginCallback() {
             @Override
             public void onLoginSuccess(User user) {
                 ShadowActivity shadowActivity = shadowOf(loginActivity);
@@ -98,10 +104,12 @@ public class LoginPresenterTest {
 
             @Override
             public void onLoginError(LoginException e) {
+                fail();
             }
         });
     }
 
+    // user use flow
     @Test
     public void testLoginSuccessAndJump() throws Exception {
         final LoginActivity loginActivity = Robolectric.setupActivity(LoginActivity.class);
@@ -237,9 +245,12 @@ public class LoginPresenterTest {
             }
         })), any(LoginCallback.class));
         mLoginPresenter.login(errorUser.getUsername(), errorUser.getPassword());
+        // verify callback is called.
         verify(mUserRepository).login(eq(errorUser.getUsername()), eq(errorUser.getPassword()), mLoginCallbackArgumentCaptor.capture());
+
         mLoginCallbackArgumentCaptor.getValue().onLoginError(loginException);
         ArgumentCaptor<LoginException> loginExceptionArgumentCaptor = ArgumentCaptor.forClass(LoginException.class);
+        // verify callback method onLoginError is called.
         verify(mLoginView).showLoginError(loginExceptionArgumentCaptor.capture());
     }
 }

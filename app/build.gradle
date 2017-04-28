@@ -7,6 +7,46 @@ spoon {
     grantAllPermissions = true
 }
 
+task sendMessageToDingDing << {
+    def url = "https://oapi.dingtalk.com/robot/send?access_token=b90ec59a860a3c96f29ff932fe05173f7e52093a3f3a8df9a155960009322e07"
+
+    def http = new org.apache.http.impl.client.DefaultHttpClient()
+    def post = new org.apache.http.client.methods.HttpPost(url);
+    post.addHeader("Content-Type", "application/json; charset=utf-8")
+
+//    def jsonObj = new org.json.JSONObject()
+//    jsonObj.put("msgtype", "text")
+//
+//    def textObj = new org.json.JSONObject();
+//    def content = "from gradle"
+//    textObj.put("content", content)
+//    jsonObj.put("text", textObj)
+//
+//    def atObj = new org.json.JSONObject();
+//    def isAtAll = true
+//    atObj.put("isAtAll", isAtAll)
+//    jsonObj.put("at", atObj)
+
+    def textContent = "from gradle"
+    def textMsg = "{ \"msgtype\": \"text\", \"text\": {\"content\": \"" + textContent + "\"}, \"at\":{\"isAtAll\": true}}";
+
+    def stringEntity = new org.apache.http.entity.StringEntity(textMsg, "utf-8")
+    post.setEntity(stringEntity)
+    def response = http.execute(post)
+    if (response.getStatusLine().getStatusCode() == org.apache.http.HttpStatus.SC_OK) {
+        def result = org.apache.http.util.EntityUtils.toString(response.getEntity())
+        println(result)
+        println "build finished have send message to DingDing."
+    }
+
+}
+
+project.afterEvaluate {
+    tasks.matching { (it.name == 'assembleRelease') }.each {
+        sendMessageToDingDing
+    }
+}
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -24,39 +64,47 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+
 }
 
 //jacocoTestReport依赖于testDebugUnitTest task，所以在执行jacoco之前需要先执行testDebugUnitTest
-task jacocoTestReport(type:JacocoReport,dependsOn:"testDebugUnitTest"){
-    group = "Reporting"
-    description = "Generate Jacoco coverage reports after running tests."
-    reports{
-        xml.enabled = false
-        html.enabled = true
-        csv.enabled = false
-    }
-    classDirectories = fileTree(
-            dir : "$buildDir/intermediates/classes/test/debug",
-            excludes : [
-                    '**/R.class',
-                    '**/R$*.class',
-                    '**/BuildConfig.*',
-                    '**/Manifest*.*'
-            ]
-    )
-    def coverageSourceDirs = ['src/main/java']
-    additionalSourceDirs = files(coverageSourceDirs)
-    sourceDirectories = files(coverageSourceDirs)
-    additionalClassDirs = files(coverageSourceDirs)
-    executionData = files("$buildDir/jacoco/testDebugUnitTest.exec")
-}
+//task jacocoTestReport(type:JacocoReport,dependsOn:"testDebugUnitTest"){
+//    group = "Reporting"
+//    description = "Generate Jacoco coverage reports after running tests."
+//    reports{
+//        xml.enabled = false
+//        html.enabled = true
+//        csv.enabled = false
+//    }
+//    classDirectories = fileTree(
+//            dir : "$buildDir/intermediates/classes/test/debug",
+//            excludes : [
+//                    '**/R.class',
+//                    '**/R$*.class',
+//                    '**/BuildConfig.*',
+//                    '**/Manifest*.*'
+//            ]
+//    )
+//    def coverageSourceDirs = ['src/main/java']
+//    additionalSourceDirs = files(coverageSourceDirs)
+//    sourceDirectories = files(coverageSourceDirs)
+//    additionalClassDirs = files(coverageSourceDirs)
+//    executionData = files("$buildDir/jacoco/testDebugUnitTest.exec")
+//}
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    androidTestCompile ('com.android.support.test.espresso:espresso-intents:2.2.2', {
+    androidTestCompile('com.android.support.test.espresso:espresso-intents:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:25.1.1'
@@ -68,9 +116,13 @@ dependencies {
     testCompile 'org.mockito:mockito-core:2.7.9'
     testCompile "org.spockframework:spock-core:1.1-groovy-2.4-rc-2"
     compile "org.codehaus.groovy:groovy:2.4.7:grooid"
+
+//    compile "org.codehaus.groovy:http-builder:0.4.0"
+//    compile "org.codehaus.groovy:groovy-all:2.3.3"
+
 //    testCompile 'org.robospock:robospock:1.0.1'
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
-    androidTestCompile ('com.android.support.test:runner:0.5', {
+    androidTestCompile('com.android.support.test:runner:0.5', {
         exclude group: 'com.android.support', module: 'support-annotations'
     });
     androidTestCompile 'org.hamcrest:hamcrest-integration:1.3'
